@@ -1,8 +1,11 @@
 #title {
     color: white;
-    background-color: black;
+    background-color: rgb(74, 74, 110);
     font-size: 40px;
     font-weight: 700;
+    align-self: stretch;
+    text-align: center;
+    padding: 20px;
 }
 
 body,
@@ -13,8 +16,11 @@ body,
 }
 
 body {
-    justify-content: center;
+    height: 100vh;
+    justify-content: space-between;
     gap: 50px;
+    background-color: rgb(174, 174, 255);
+    margin: 0;
 }
 
 .calculator {
@@ -54,4 +60,12 @@ button {
     height: 50px;
     width: 50px;
     border-radius: 2px;
+}
+
+#footer {
+    background-color: rgb(74, 74, 110);
+    color: white;
+    align-self: stretch;
+    text-align: center;
+    padding: 30px;
 }

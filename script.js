@@ -70,7 +70,6 @@ pressedButton.forEach((item) => {
                 break;
             case 'operator':
                 if (firstNumber.length === 0) {
-                    console.log('hello');
                     firstNumber = 0;
                     screenContent.textContent = 0;
                 }
