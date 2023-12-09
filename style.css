@@ -30,6 +30,9 @@ body {
     height: 50px;
     width: 300px;
     background-color: beige;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .buttons {
