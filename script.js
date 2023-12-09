@@ -17,13 +17,20 @@ function divide (...array) {
 function populateDisplay (value) {
     if (!isSecond) {
         firstNumber.push(value);
+        screenContent.textContent = firstNumber.join('');
     } else {
         secondNumber.push(value);
+        screenContent.textContent = secondNumber.join('');
     }
-    screenContent.textContent += value;
 }
 
-function operate (num1, num2, operator) {
+function operate (num1, num2, operator = '+') {
+    if (typeof num1 !== 'number') {
+        num1 = Number(num1.join(''));
+    }
+    if (typeof num2 !== 'number') {
+        num2 = Number(num2.join(''));
+    }
     switch (operator) {
         case '+':
             return add(num1, num2);
@@ -35,6 +42,9 @@ function operate (num1, num2, operator) {
             return multiply(num1, num2);
             break;
         case '/':
+            if (num2 === 0) {
+                return 'Math ERROR!';
+            }
             return divide(num1, num2);
             break;
     }
@@ -44,34 +54,56 @@ let firstNumber = [];
 let secondNumber = [];
 let operator;
 let isSecond = false;
+let result;
+
+const screen = document.querySelector('#display');
+const screenContent = document.createElement('p');
+screenContent.textContent = 0;
+screen.appendChild(screenContent);
 
 let pressedButton = document.querySelectorAll('button');
 pressedButton.forEach((item) => {
     item.addEventListener('click', (event) => {
         switch (event.srcElement.className) {
             case 'number':
-                console.log('number');
                 populateDisplay(event.srcElement.textContent);
                 break;
             case 'operator':
+                if (firstNumber.length === 0) {
+                    console.log('hello');
+                    firstNumber = 0;
+                    screenContent.textContent = 0;
+                }
+                if (isSecond) {
+                    res = operate(firstNumber, secondNumber,operator);
+                    screenContent.textContent = res;
+                    firstNumber = res;
+                    secondNumber = [];
+                }
                 operator = event.srcElement.textContent;
                 isSecond = true;
-                screenContent.textContent = '';
-                console.log('operator');
                 break;
             case 'equal':
-                let res = operate(Number(firstNumber.join('')),Number(secondNumber.join('')),operator);
+                if (firstNumber == []) {
+                    firstNumber = 0;
+                }
+                if (secondNumber == []) {
+                    secondNumber = 0;
+                }
+                res = operate(firstNumber, secondNumber, operator);
                 screenContent.textContent = res;
-                console.log('equal');
+                firstNumber = [];
+                secondNumber = [];
+                operator = undefined;
+                isSecond = false;
                 break;
             case 'clear':
-                console.log('clear button');
+                firstNumber = [];
+                secondNumber = [];
+                operator = undefined;
+                isSecond = false;
+                screenContent.textContent = 0;
                 break;
         }
-        // screenContent.textContent = event.srcElement.textContent;
     });
 });
-
-const screen = document.querySelector('#display');
-const screenContent = document.createElement('p');
-screen.appendChild(screenContent);
