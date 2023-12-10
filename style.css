@@ -39,7 +39,7 @@ body {
     width: 300px;
     background-color: beige;
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end;
     align-items: center;
     font-family: cursive;
     font-size: 30px;

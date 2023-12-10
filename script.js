@@ -16,24 +16,28 @@ function divide (...array) {
 
 function numberButton (value) {
     if (!isSecond) {
-        firstNumber.push(value);
+        if (firstNumber.length === 1 && firstNumber[0] === 0) {
+            firstNumber[0] = value;
+        } else {
+            firstNumber.push(value);   
+        }
         screenContent.textContent = firstNumber.join('');
     } else {
-        secondNumber.push(value);
+        if (secondNumber.length === 1 && secondNumber[0] === 0) {
+            secondNumber[0] = value;
+        } else {
+            secondNumber.push(value);   
+        }
         screenContent.textContent = secondNumber.join('');
     }
 }
 
 function operatorButton (op) {
-    if (firstNumber.length === 0) {
-        firstNumber = 0;
-        screenContent.textContent = 0;
-    }
     if (isSecond) {
         res = operate(firstNumber, secondNumber,operator);
         screenContent.textContent = res;
         firstNumber = res;
-        secondNumber = [];
+        secondNumber = [0];
     }
     operator = op;
     isSecond = true;
@@ -42,16 +46,10 @@ function operatorButton (op) {
 }
 
 function equalButton () {
-    if (firstNumber == []) {
-        firstNumber = 0;
-    }
-    if (secondNumber == []) {
-        secondNumber = 0;
-    }
     res = operate(firstNumber, secondNumber, operator);
     screenContent.textContent = res;
-    firstNumber = [];
-    secondNumber = [];
+    firstNumber = [0];
+    secondNumber = [0];
     operator = undefined;
     isSecond = false;
     isNegative = false;
@@ -59,8 +57,8 @@ function equalButton () {
 }
 
 function clearButton () {
-    firstNumber = [];
-    secondNumber = [];
+    firstNumber = [0];
+    secondNumber = [0];
     operator = undefined;
     isSecond = false;
     isNegative = false;
@@ -71,7 +69,6 @@ function clearButton () {
 function signButton () {
     if (isNegative) {
         isNegative = false;
-        // screenSign.textContent = '';
         if (isSecond) {
             secondNumber.shift('-');
             screenContent.textContent = secondNumber.join('');
@@ -81,7 +78,6 @@ function signButton () {
         }
     } else {
         isNegative = true;
-        // screenSign.textContent = '-';
         if (isSecond) {
             secondNumber.unshift('-');
             screenContent.textContent = secondNumber.join('');
@@ -94,10 +90,18 @@ function signButton () {
 
 function deleteButton() {
     if (isSecond) {
-        deleted = secondNumber.splice(-1);
+        if (secondNumber.length === 1) {
+            secondNumber[0] = 0;
+        } else {
+            deleted = secondNumber.splice(-1);
+        }
         screenContent.textContent = secondNumber.join('');
     } else {
-        deleted = firstNumber.splice(-1);
+        if (firstNumber.length === 1) {
+            firstNumber[0] = 0;
+        } else {
+            deleted = firstNumber.splice(-1);
+        }
         screenContent.textContent = firstNumber.join('');
     }
     if(deleted[0] === '.') {
@@ -176,14 +180,12 @@ let operator;
 let isSecond = false;
 let isNegative = false;
 let hasDot = false;
+let deleted = [];
 let result;
 
 const screen = document.querySelector('#display');
 const screenContent = document.createElement('div');
-const screenSign = document.createElement('div');
 screenContent.textContent = 0;
-screenSign.textContent = '';
-screen.appendChild(screenSign);
 screen.appendChild(screenContent);
 
 let pressedButton = document.querySelectorAll('button');
