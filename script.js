@@ -38,6 +38,7 @@ function operatorButton (op) {
     operator = op;
     isSecond = true;
     isNegative = false;
+    hasDot = false;
 }
 
 function equalButton () {
@@ -54,6 +55,7 @@ function equalButton () {
     operator = undefined;
     isSecond = false;
     isNegative = false;
+    hasDot = false;
 }
 
 function clearButton () {
@@ -62,6 +64,7 @@ function clearButton () {
     operator = undefined;
     isSecond = false;
     isNegative = false;
+    hasDot = false;
     screenContent.textContent = 0;
 }
 
@@ -86,6 +89,32 @@ function signButton () {
             firstNumber.unshift('-');
             screenContent.textContent = firstNumber.join('');
         }
+    }
+}
+
+function deleteButton() {
+    if (isSecond) {
+        deleted = secondNumber.splice(-1);
+        screenContent.textContent = secondNumber.join('');
+    } else {
+        deleted = firstNumber.splice(-1);
+        screenContent.textContent = firstNumber.join('');
+    }
+    if(deleted[0] === '.') {
+        hasDot = false;
+    }
+}
+
+function dotButton() {
+    if (!hasDot) {
+        hasDot = true;
+        if (isSecond) {
+            secondNumber.push('.');
+            screenContent.textContent = secondNumber.join('');
+        } else {
+            firstNumber.push('.');
+            screenContent.textContent = firstNumber.join('');
+        }   
     }
 }
 
@@ -130,13 +159,13 @@ function buttonRecognizer(event) {
             clearButton();
             break;
         case 'delete':
-            clearButton();
+            deleteButton();
             break;
         case 'sign':
             signButton();
             break;
         case 'dot':
-            clearButton();
+            dotButton();
             break;
     }
 }
