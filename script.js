@@ -190,3 +190,47 @@ screen.appendChild(screenContent);
 
 let pressedButton = document.querySelectorAll('button');
 pressedButton.forEach(item => item.addEventListener('click', buttonRecognizer));
+
+//Add keyboard events to control the calculator
+const keys = document.addEventListener('keyup',keyboardButtons);
+
+function keyboardButtons (event) {
+    switch (event.key) {
+        case '0':
+        case '1':
+        case '2':
+        case '3':
+        case '4':
+        case '5':
+        case '6':
+        case '7':
+        case '8':
+        case '9':
+            numberButton(event.key);
+            break;
+        case '+':
+        case '-':
+        case '*':
+        case '/':
+            operatorButton (event.key);
+            break;
+        case '=':
+        case 'Enter':
+            equalButton ();
+            break;
+        case 'Delete':
+        case 'Escape':
+            clearButton();
+            break;
+        case 'Backspace':
+            deleteButton();
+            break;
+        case '.':
+        case ',':
+            dotButton();
+            break;
+        default:
+            console.log(event.key);
+            break;
+    }
+}
