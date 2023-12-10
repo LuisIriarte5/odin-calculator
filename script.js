@@ -14,13 +14,78 @@ function divide (...array) {
     return array.reduce((total, item) => total/item);
 }
 
-function populateDisplay (value) {
+function numberButton (value) {
     if (!isSecond) {
         firstNumber.push(value);
         screenContent.textContent = firstNumber.join('');
     } else {
         secondNumber.push(value);
         screenContent.textContent = secondNumber.join('');
+    }
+}
+
+function operatorButton (op) {
+    if (firstNumber.length === 0) {
+        firstNumber = 0;
+        screenContent.textContent = 0;
+    }
+    if (isSecond) {
+        res = operate(firstNumber, secondNumber,operator);
+        screenContent.textContent = res;
+        firstNumber = res;
+        secondNumber = [];
+    }
+    operator = op;
+    isSecond = true;
+    isNegative = false;
+}
+
+function equalButton () {
+    if (firstNumber == []) {
+        firstNumber = 0;
+    }
+    if (secondNumber == []) {
+        secondNumber = 0;
+    }
+    res = operate(firstNumber, secondNumber, operator);
+    screenContent.textContent = res;
+    firstNumber = [];
+    secondNumber = [];
+    operator = undefined;
+    isSecond = false;
+    isNegative = false;
+}
+
+function clearButton () {
+    firstNumber = [];
+    secondNumber = [];
+    operator = undefined;
+    isSecond = false;
+    isNegative = false;
+    screenContent.textContent = 0;
+}
+
+function signButton () {
+    if (isNegative) {
+        isNegative = false;
+        // screenSign.textContent = '';
+        if (isSecond) {
+            secondNumber.shift('-');
+            screenContent.textContent = secondNumber.join('');
+        } else {
+            firstNumber.shift('-');
+            screenContent.textContent = firstNumber.join('');
+        }
+    } else {
+        isNegative = true;
+        // screenSign.textContent = '-';
+        if (isSecond) {
+            secondNumber.unshift('-');
+            screenContent.textContent = secondNumber.join('');
+        } else {
+            firstNumber.unshift('-');
+            screenContent.textContent = firstNumber.join('');
+        }
     }
 }
 
@@ -50,59 +115,47 @@ function operate (num1, num2, operator = '+') {
     }
 }
 
-let firstNumber = [];
-let secondNumber = [];
+function buttonRecognizer(event) {
+    switch (event.srcElement.className) {
+        case 'number':
+            numberButton(event.srcElement.textContent);
+            break;
+        case 'operator':
+            operatorButton (event.srcElement.textContent);
+            break;
+        case 'equal':
+            equalButton ();
+            break;
+        case 'clear':
+            clearButton();
+            break;
+        case 'delete':
+            clearButton();
+            break;
+        case 'sign':
+            signButton();
+            break;
+        case 'dot':
+            clearButton();
+            break;
+    }
+}
+
+let firstNumber = [0];
+let secondNumber = [0];
 let operator;
 let isSecond = false;
+let isNegative = false;
+let hasDot = false;
 let result;
 
 const screen = document.querySelector('#display');
-const screenContent = document.createElement('p');
+const screenContent = document.createElement('div');
+const screenSign = document.createElement('div');
 screenContent.textContent = 0;
+screenSign.textContent = '';
+screen.appendChild(screenSign);
 screen.appendChild(screenContent);
 
 let pressedButton = document.querySelectorAll('button');
-pressedButton.forEach((item) => {
-    item.addEventListener('click', (event) => {
-        switch (event.srcElement.className) {
-            case 'number':
-                populateDisplay(event.srcElement.textContent);
-                break;
-            case 'operator':
-                if (firstNumber.length === 0) {
-                    firstNumber = 0;
-                    screenContent.textContent = 0;
-                }
-                if (isSecond) {
-                    res = operate(firstNumber, secondNumber,operator);
-                    screenContent.textContent = res;
-                    firstNumber = res;
-                    secondNumber = [];
-                }
-                operator = event.srcElement.textContent;
-                isSecond = true;
-                break;
-            case 'equal':
-                if (firstNumber == []) {
-                    firstNumber = 0;
-                }
-                if (secondNumber == []) {
-                    secondNumber = 0;
-                }
-                res = operate(firstNumber, secondNumber, operator);
-                screenContent.textContent = res;
-                firstNumber = [];
-                secondNumber = [];
-                operator = undefined;
-                isSecond = false;
-                break;
-            case 'clear':
-                firstNumber = [];
-                secondNumber = [];
-                operator = undefined;
-                isSecond = false;
-                screenContent.textContent = 0;
-                break;
-        }
-    });
-});
+pressedButton.forEach(item => item.addEventListener('click', buttonRecognizer));
